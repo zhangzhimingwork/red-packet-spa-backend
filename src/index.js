@@ -22,10 +22,10 @@ router.get('/health', async (ctx) => {
 
 app.use(router.routes()).use(router.allowedMethods());
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`🚀 后端服务运行在 http://localhost:${PORT}`);
-});
+// const PORT = process.env.PORT || 3001;
+// app.listen(PORT, () => {
+//   console.log(`🚀 后端服务运行在 http://localhost:${PORT}`);
+// });
 
 // 导出nonceStore供认证路由使用
-module.exports = { app };
+module.exports = app;
