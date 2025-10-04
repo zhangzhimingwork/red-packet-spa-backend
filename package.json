@@ -2,7 +2,8 @@
   "name": "red-packet-spa-backend",
   "version": "1.0.0",
   "main": "index.js",
-   "scripts": {
+  "packageManager": "yarn@4.5.0",
+  "scripts": {
     "dev": "node src/index.js",
     "start": "node src/index.js",
     "build": "echo 'No build step required for pure JS backend'"
