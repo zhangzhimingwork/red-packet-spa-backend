@@ -29,8 +29,13 @@ router.post('/api/auth/nonce', async (ctx) => {
 
     const normalizedAddress = address.toLowerCase();
 
-    // 存储nonce
-    nonceStore.set(normalizedAddress, { nonce, expiresAt });
+    // 从请求头中获取 origin，如果没有则使用环境变量
+    const origin = ctx.request.headers.origin || process.env.FRONTEND_URL || 'http://localhost:3000';
+    // 从 origin 中提取 domain (去掉 http:// 或 https://)
+    const domain = origin.replace(/^https?:\/\//, '');
+
+    // 存储nonce和domain
+    nonceStore.set(normalizedAddress, { nonce, expiresAt, domain });
 
     // 清理过期的nonce
     cleanExpiredNonces();
@@ -41,7 +46,7 @@ router.post('/api/auth/nonce', async (ctx) => {
       nonce,
       timestamp,
       expiresAt,
-      domain: process.env.DOMAIN || 'localhost:3000',
+      domain,
     });
 
     ctx.body = {
@@ -108,6 +113,13 @@ router.post('/api/auth/verify', async (ctx) => {
     if (!message.includes(storedData.nonce)) {
       ctx.status = 401;
       ctx.body = { error: '消息验证失败：nonce不匹配' };
+      return;
+    }
+
+    // 验证消息中的 domain 是否匹配
+    if (!message.includes(storedData.domain)) {
+      ctx.status = 401;
+      ctx.body = { error: '消息验证失败：domain不匹配' };
       return;
     }
 
