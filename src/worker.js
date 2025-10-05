@@ -1,5 +1,5 @@
 import { verifyMessage } from 'viem';
-import jwt from 'jsonwebtoken';
+import { sign, verify, TokenExpiredError } from './utils/jwt.js';
 import { generateNonce } from './utils/crypto.js';
 import { createSignatureMessage } from './utils/message.js';
 
@@ -158,7 +158,7 @@ async function handleVerify(request, env) {
     nonceStore.delete(normalizedAddress);
 
     // 生成 JWT Token
-    const token = jwt.sign(
+    const token = await sign(
       {
         address: normalizedAddress,
         iat: Math.floor(Date.now() / 1000),
@@ -201,7 +201,7 @@ async function handleMe(request, env) {
 
     const token = authHeader.substring(7);
     
-    const decoded = jwt.verify(
+    const decoded = await verify(
       token,
       env.JWT_SECRET || 'your-secret-key'
     );
@@ -214,17 +214,18 @@ async function handleMe(request, env) {
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   } catch (error) {
-    if (error instanceof jwt.JsonWebTokenError) {
+    if (error.message === 'Invalid signature' || error.message === 'Invalid token format') {
       return new Response(
         JSON.stringify({ error: '无效的Token' }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
-    } else if (error instanceof jwt.TokenExpiredError) {
+    } else if (error.message === 'Token expired') {
       return new Response(
         JSON.stringify({ error: 'Token已过期' }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     } else {
+      console.error('Token验证错误:', error);
       return new Response(
         JSON.stringify({ error: '服务器错误' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
