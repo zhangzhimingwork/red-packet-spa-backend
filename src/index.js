@@ -28,4 +28,4 @@ app.use(router.routes()).use(router.allowedMethods());
 // });
 
 // 导出nonceStore供认证路由使用
-module.exports = app;
+module.exports = app.callback();
