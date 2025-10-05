@@ -1,14 +1,13 @@
 {
   "name": "red-packet-spa-backend",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy"
   },
   "dependencies": {
-    "viem": "^2.7.0",
-    "jsonwebtoken": "^9.0.2"
+    "viem": "^2.7.0"
   },
   "devDependencies": {
     "wrangler": "^3.0.0"
