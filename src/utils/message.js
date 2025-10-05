@@ -1,7 +1,7 @@
 /**
- * 创建EIP-4361标准的签名消息
+ * 创建 EIP-4361 标准的签名消息
  */
-function createSignatureMessage(params) {
+export function createSignatureMessage(params) {
   const { address, nonce, timestamp, expiresAt, domain } = params;
   
   const issuedAt = new Date(timestamp).toISOString();
@@ -20,5 +20,3 @@ Nonce: ${nonce}
 Issued At: ${issuedAt}
 Expiration Time: ${expirationTime}`;
 }
-
-module.exports = { createSignatureMessage };
