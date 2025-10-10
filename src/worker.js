@@ -31,10 +31,9 @@ function cleanExpiredNonces() {
 }
 
 // 处理生成 nonce 的请求
-async function handleNonce(request, env, domain) {
-  console.log('domain🍊',domain)
+async function handleNonce(request, env) {
   try {
-    const { address } = await request.json()
+    const { address, domain } = await request.json()
 
     // 验证地址格式
     if (!address || !/^0x[a-fA-F0-9]{40}$/.test(address)) {
@@ -257,7 +256,7 @@ export default {
     }
 
     if (path === '/api/auth/nonce' && method === 'POST') {
-      return handleNonce(request, env, request.headers.get('origin'))
+      return handleNonce(request, env)
     }
 
     if (path === '/api/auth/verify' && method === 'POST') {
