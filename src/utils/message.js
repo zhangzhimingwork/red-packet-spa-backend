@@ -4,39 +4,38 @@
  * 方案2: 简单格式 (避免 MetaMask 警告)
  */
 export function createSignatureMessage(params) {
-  const { address, nonce, timestamp, expiresAt, domain } = params;
-  
+  const { address, nonce, timestamp, expiresAt, domain } = params
+
   // 方案2: 简单格式 - 不会触发 MetaMask 警告
   // 推荐：如果你不需要严格遵循 EIP-4361 标准
-  const issuedAt = new Date(timestamp).toISOString();
-  const expirationTime = new Date(expiresAt).toISOString();
-  
-  return `Welcome to our DApp!
+  //   const issuedAt = new Date(timestamp).toISOString()
+  //   const expirationTime = new Date(expiresAt).toISOString()
 
-Please sign this message to verify your identity.
+  //   return `Welcome to our DApp!
 
-Address: ${address}
-Nonce: ${nonce}
-Issued At: ${issuedAt}
-Expiration Time: ${expirationTime}
+  // Please sign this message to verify your identity.
 
-This request will not trigger a blockchain transaction or cost any gas fees.`;
+  // Address: ${address}
+  // Nonce: ${nonce}
+  // Issued At: ${issuedAt}
+  // Expiration Time: ${expirationTime}
+
+  // This request will not trigger a blockchain transaction or cost any gas fees.`
 
   // 方案1: EIP-4361 标准格式 (如果 domain 匹配则使用此格式)
-  /*
-  const issuedAt = new Date(timestamp).toISOString();
-  const expirationTime = new Date(expiresAt).toISOString();
+
+  const issuedAt = new Date(timestamp).toISOString()
+  const expirationTime = new Date(expiresAt).toISOString()
 
   return `${domain} wants you to sign in with your Ethereum account:
 ${address}
 
 Welcome to our DApp! Please sign this message to verify your identity.
 
-URI: https://${domain}
+URI: ${domain}
 Version: 1
 Chain ID: 1
 Nonce: ${nonce}
 Issued At: ${issuedAt}
-Expiration Time: ${expirationTime}`;
-  */
+Expiration Time: ${expirationTime}`
 }
